@@ -1,0 +1,11 @@
+{
+	"name": "symbolic-chain",
+	"version": "1.0.0",
+	"repository": "srcagency/symbolic-chain",
+	"scripts": {
+		"test": "node test"
+	},
+	"devDependencies": {
+		"tape": "^4.9.0"
+	}
+}
