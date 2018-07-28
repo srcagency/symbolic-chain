@@ -1,9 +1,11 @@
 'use strict'
 
-const symbol = Symbol('Symbolic chain node')
+const next = Symbol('Next node')
+const prev = Symbol('Previous node')
 
 module.exports = {
-	symbol: symbol,
+	next: next,
+	prev: prev,
 	create: create,
 	insertBefore: insertBefore,
 	insertAfter: insertAfter,
@@ -19,29 +21,34 @@ function create(items){
 
 	if (!first) throw new Error('At least one item is required')
 
-	first[symbol] = {prev: null, next: null}
+	first[prev] = null
+	first[next] = null
 
 	for (let i = 1;i < items.length;i++) insertAfter(first, items[i])
 }
 
-function insertBefore(next, item){
-	const nextNode = next[symbol]
-	const prev = nextNode.prev
-	item[symbol] = {prev: prev, next: next}
-	nextNode.prev = item
-	if (prev !== null) prev[symbol].next = item
+function insertBefore(base, item){
+	const tail = base[prev]
+
+	if (tail !== null) tail[next] = item
+	base[prev] = item
+
+	item[prev] = tail
+	item[next] = base
 }
 
-function insertAfter(prev, item){
-	const prevNode = prev[symbol]
-	const next = prevNode.next
-	item[symbol] = {prev: prev, next: next}
-	prevNode.next = item
-	if (next !== null) next[symbol].prev = item
+function insertAfter(base, item){
+	const head = base[next]
+
+	if (head !== null) head[prev] = item
+	base[next] = item
+
+	item[prev] = base
+	item[next] = head
 }
 
-function before(item){ return item[symbol].prev }
-function after(item){ return item[symbol].next }
+function before(item){ return item[prev] }
+function after(item){ return item[next] }
 
 function toArray(begin){
 	const arr = [begin]
