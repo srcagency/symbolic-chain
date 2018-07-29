@@ -6,6 +6,6 @@
 		"test": "node test"
 	},
 	"devDependencies": {
-		"tape": "^4.9.0"
+		"tape": "^4.9.1"
 	}
 }
